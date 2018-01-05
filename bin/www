@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+const app = require('../app');
+const debug = require('debug')('Express-Api-SwaggerUi: ');
+const http = require('http');
+
+// For HTTPS
+// const https = require('https');
+// const fs = require('fs');
+// const privateKey = fs.readFileSync(__dirname + '.pem', 'utf8');
+// const certificate = fs.readFileSync(__dirname + '.crt', 'utf8');
+
+let port;
+let server;
+
+/**
+ * Using cluster
+ const cluster = require('cluster');
+ const os = require("os");
+ const cpuThread = os.cpus().length;
+ // Set cluster scheduling mode (optional)
+ //cluster.schedulingPolicy = cluster.SCHED_NONE;
+
+ //At least 1 worker, max total num of cpu threads-2 workers
+ let maxWorker = 1;
+ if (cpuThread > 3) {
+    maxWorker = cpuThread - 2;
+}
+
+ if (cluster.isMaster) {
+    debug("Master (pid=" + process.pid + ") ");
+    for (let i = 0; i < maxWorker; i++) {
+        let worker = cluster.fork();
+        // For all workers message synchronization
+        // worker.on("message", function (msg) {
+        //     for (let id in cluster.workers) {
+        //         if (this !== cluster.workers[id]) {
+        //             cluster.workers[id].send(msg);
+        //         }
+        //     }
+        // });
+    }
+} else if (cluster.isWorker) {
+    startUp();
+}
+ */
+
+/**
+ * Not using cluster. Please use with pm2.
+ * https://github.com/Unitech/pm2
+ */
+startUp();
+
+/**
+ * Server start up
+ */
+function startUp() {
+    /**
+     * Get port from environment and store in Express.
+     */
+    port = normalizePort(process.env.PORT || '8099');
+    app.set('port', port);
+
+    /**
+     * Create HTTP server.
+     */
+    server = http.createServer(app);
+
+    // For HTTPS server.
+    // server = https.createServer({key: privateKey, cert: certificate}, app);
+
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+    server.on('error', onError);
+    server.on('listening', onListening);
+    server.listen(port);
+}
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort(val) {
+    let port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    let bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+    let addr = server.address();
+    let bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug("Process (pid=" + process.pid + ") " + 'Listening on ' + bind);
+}
