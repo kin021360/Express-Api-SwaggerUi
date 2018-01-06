@@ -5,19 +5,55 @@ const favicon = require('serve-favicon');
 const accessLogger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
-const api = require("./routes/api.js");
-
+const helmet = require('helmet');
 const app = express();
+
+/**
+ * Express setup
+ * You should consider the config setup order.
+ * Wrong setup order may produce unexpected result.
+ */
+// region basic setup
+// Set running environment
+app.set("env", "dev");
+
+// Use web security
+app.use(helmet());
+
+// Use logger for access log
+app.use(accessLogger('dev'));
+
+// Use bodyParser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+// Use cookieParser
+app.use(cookieParser());
+
+// View engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// Use public static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(accessLogger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
+// CORS config, or use cors middleware module
+// app.use(function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', 'https://localhost');
+//     res.header('Access-Control-Allow-Methods', 'GET');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// });
+// endregion
+
+/**
+ * Custom route setup
+ */
+const api = require("./routes/api.js");
+app.use("/api", api);
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const unAuthorizedSwaggerDef = {
@@ -72,21 +108,6 @@ app.get('/swagger.json', function (req, res) {
     }
 });
 
-app.set("env", "dev");
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://localhost');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-
-app.use("/api", api);
-
 function checkApiKey(req, res, next) {
     if (req.headers.api_key && req.headers.api_key === "123456") {
         next(); // allow the next route to run
@@ -95,6 +116,10 @@ function checkApiKey(req, res, next) {
     }
 }
 
+/**
+ * Error handler
+ */
+// region error handler setup
 // catch 404 and forward to error handler
 function error404(req, res, next) {
     let err = new Error('Not Found');
@@ -103,7 +128,6 @@ function error404(req, res, next) {
 }
 app.use(error404);
 
-// error handlers
 if (app.get('env') === 'dev') {
     // development error handler
     // will print stacktrace
@@ -125,5 +149,6 @@ if (app.get('env') === 'dev') {
         });
     });
 }
+// endregion
 
 module.exports = app;

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const os = require("os");
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 const processUuid = uuid.v4();
 
 /**
