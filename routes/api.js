@@ -27,6 +27,18 @@ const processUuid = uuid.v4();
 router.get("/status", checkApiKey, function (req, res) {
     let version = "V0.1";
     console.log(JSON.stringify(req.headers));
+    res.send({
+        version: version,
+        processUuid: processUuid,
+        loadAvg: os.loadavg(),
+        upTime: (os.uptime() / 3600).toFixed(2),
+        processUpTime: (process.uptime() / 3600).toFixed(2)
+    });
+});
+
+router.get("/statusNoKey", function (req, res) {
+    let version = "V0.1";
+    console.log(JSON.stringify(req.headers));
     res.render("status", {
         version: version,
         processUuid: processUuid,
