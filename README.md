@@ -36,8 +36,7 @@ Sample api key authorization of api_key: 123456
 
 ## Example using swagger-jsdoc
 
-Please checkout the docs from swagger-jsdoc first: 
-https://github.com/Surnet/swagger-jsdoc/blob/master/docs/GETTING-STARTED.md
+Please checkout the docs from [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc/blob/master/docs/GETTING-STARTED.md) first.
 
 In `/routes/api.js`
 
