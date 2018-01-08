@@ -1,10 +1,16 @@
 {
-  "name": "Express-Api-SwaggerUi",
+  "name": "express-api-swaggerui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node --expose-gc --max-old-space-size=8192 ./bin/www"
+    "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kin021360/Express-Api-SwaggerUi"
+  },
+  "author": "Nathan Lam",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
