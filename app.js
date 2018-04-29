@@ -55,58 +55,67 @@ app.use(express.static(path.join(__dirname, 'public')));
 const api = require("./routes/api.js");
 app.use("/api", api);
 
-const swaggerJSDoc = require('swagger-jsdoc');
-const unAuthorizedSwaggerDef = {
-    info: {
+
+/**
+ * Swagger doc setup
+ */
+let unAuthorizedSpec;
+let authorizedSpec;
+
+(() => {
+    const swaggerJSDoc = require('swagger-jsdoc');
+
+    //swagger doc basic definition
+    const swaggerDefStr = JSON.stringify({
+        basePath: '/',
+        info: {},
+        securityDefinitions: {
+            "api_key": {
+                "type": "apiKey",
+                "name": "api_key",
+                "in": "header"
+            }
+        }
+    });
+
+    //create two object instance
+    const unAuthorizedSwaggerDef = JSON.parse(swaggerDefStr);
+    const authorizedSwaggerDef = JSON.parse(swaggerDefStr);
+
+    //customize swagger doc info
+    unAuthorizedSwaggerDef.info = {
         title: 'Unauthorized',
         version: '1.0.0',
         description: 'Please authorize with api key.'
-    },
-    host: 'localhost:8099',
-    basePath: '/',
-    securityDefinitions: {
-        "api_key": {
-            "type": "apiKey",
-            "name": "api_key",
-            "in": "header"
-        }
-    }
-};
+    };
 
-const authorizedSwaggerDef = {
-    info: {
+    authorizedSwaggerDef.info = {
         title: 'Node Swagger API',
         version: '1.0.0',
         description: 'Demonstrating how to describe a RESTful API with Swagger'
-    },
-    host: 'localhost:8099',
-    basePath: '/',
-    securityDefinitions: {
-        "api_key": {
-            "type": "apiKey",
-            "name": "api_key",
-            "in": "header"
-        }
-    }
-};
+    };
 
-// options for the swagger docs
-const swaggerDocOptions = {
-    swaggerDefinition: authorizedSwaggerDef,
-    apis: ['./routes/api.js']
-};
+    // generate swagger doc
+    unAuthorizedSpec = JSON.stringify(swaggerJSDoc({
+        swaggerDefinition: unAuthorizedSwaggerDef,
+        apis: []
+    }));
 
-// generate swagger doc
-const unAuthorizedSpec = JSON.stringify(swaggerJSDoc({swaggerDefinition: unAuthorizedSwaggerDef, apis: []}));
-const authorizedSpec = JSON.stringify(swaggerJSDoc(swaggerDocOptions));
+    authorizedSpec = JSON.stringify(swaggerJSDoc({
+        swaggerDefinition: authorizedSwaggerDef,
+        apis: [__dirname + '/routes/*.js']
+    }));
+})();
+
 app.get('/swagger.json', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     if (req.headers.api_key && req.headers.api_key === "123456") {
-        res.send(authorizedSpec);
+        res.json(authorizedSpec);
     } else {
-        res.send(unAuthorizedSpec);
+        res.json(unAuthorizedSpec);
     }
 });
+
 
 function checkApiKey(req, res, next) {
     if (req.headers.api_key && req.headers.api_key === "123456") {
@@ -126,6 +135,7 @@ function error404(req, res, next) {
     err.status = 404;
     next(err);
 }
+
 app.use(error404);
 
 if (app.get('env') === 'dev') {
