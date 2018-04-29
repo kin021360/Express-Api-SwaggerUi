@@ -6,7 +6,39 @@ const accessLogger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const log4js = require("log4js");
+const cors = require('cors');
 const app = express();
+
+
+/**
+ * Log4js setup
+ */
+// region log4js setup
+log4js.configure({
+    pm2: false,
+    appenders: {
+        console: {type: 'console'},
+        unhandledEx: {
+            type: 'dateFile',
+            filename: __dirname + '/log/unhandledException/unhandledEx',
+            pattern: '-yyyyMMdd.log',
+            alwaysIncludePattern: true,
+            backups: 100
+        }
+    },
+    categories: {
+        default: {appenders: ['console'], level: 'info'},
+        unhandledEx: {appenders: ['unhandledEx', 'console'], level: 'error'}
+    }
+});
+const unhandledExLogger = log4js.getLogger("unhandledEx");
+//log Promise unhandledRejection
+process.on('unhandledRejection', (reason, p) => {
+    unhandledExLogger.error(p);
+});
+// endregion
+
 
 /**
  * Express setup
@@ -40,14 +72,22 @@ app.set('view engine', 'pug');
 // Use public static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// CORS config, or use cors middleware module
-// app.use(function (req, res, next) {
-//     res.header('Access-Control-Allow-Origin', 'https://localhost');
-//     res.header('Access-Control-Allow-Methods', 'GET');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// });
+// CORS config, use cors middleware module
+// https://github.com/expressjs/cors/issues/118
+const whitelist = ['http://localhost:8099'];
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
+    methods: ['GET', 'PUT', 'POST'],
+    allowedHeaders: ["Content-Type", "api_key"]
+};
 // endregion
+
 
 /**
  * Custom route setup
@@ -110,9 +150,9 @@ let authorizedSpec;
 app.get('/swagger.json', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     if (req.headers.api_key && req.headers.api_key === "123456") {
-        res.json(authorizedSpec);
+        res.send(authorizedSpec);
     } else {
-        res.json(unAuthorizedSpec);
+        res.send(unAuthorizedSpec);
     }
 });
 
