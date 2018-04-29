@@ -86,12 +86,21 @@ const corsOptions = {
     methods: ['GET', 'PUT', 'POST'],
     allowedHeaders: ["Content-Type", "api_key"]
 };
+
 // endregion
 
 
 /**
  * Custom route setup
  */
+function checkApiKey(req, res, next) {
+    if (req.headers.api_key && req.headers.api_key === "123456") {
+        next(); // allow the next route to run
+    } else {
+        error404(req, res, next);
+    }
+}
+
 const api = require("./routes/api.js");
 app.use("/api", api);
 
@@ -156,14 +165,6 @@ app.get('/swagger.json', function (req, res) {
     }
 });
 
-
-function checkApiKey(req, res, next) {
-    if (req.headers.api_key && req.headers.api_key === "123456") {
-        next(); // allow the next route to run
-    } else {
-        error404(req, res, next);
-    }
-}
 
 /**
  * Error handler
