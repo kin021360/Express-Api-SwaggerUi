@@ -21,8 +21,8 @@ npm start
 Access the server:
 
 ```
-Swagger ui -> http://localhost:8099/ui/swagger/
-Swagger spec -> http://localhost:8099/swagger.json
+Swagger ui -> http://localhost:8099/swagger/ui/
+Swagger spec -> http://localhost:8099/swagger/swagger.json
 Sample api (JSON, require api key) -> http://localhost:8099/api/status
 Sample api (HTML, without api key) -> http://localhost:8099/api/statusNoKey
 Sample api key authorization of api_key: 123456
@@ -75,3 +75,41 @@ Recommended to use pm2 if possible. pm2 can monitor and restart the process if t
 ### cluster
 
 Please see commented section "Using cluster" in `/bin/www`
+
+## Docker Compose (With integrated nginx on same image)
+
+Build docker image:
+```bash
+docker-compose build
+```
+
+Start a container:
+```bash
+docker-compose up
+# start in detached mode
+docker-compose up -d
+```
+
+Stop the container:
+```bash
+docker-compose down
+```
+
+## Docker Compose (Separated nodejs and nginx containers)
+
+Build docker image:
+```bash
+docker-compose -f docker-compose_separated.yml build
+```
+
+Start a container:
+```bash
+docker-compose -f docker-compose_separated.yml up
+# start in detached mode
+docker-compose -f docker-compose_separated.yml up -d
+```
+
+Stop the container:
+```bash
+docker-compose -f docker-compose_separated.yml down
+```

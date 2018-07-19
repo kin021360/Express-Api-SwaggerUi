@@ -1,0 +1,10 @@
+version: '2'
+services:
+  express_api_swaggerui_nginx:
+    build:
+        context: ./
+        dockerfile: dockerfiles/Express-Api-SwaggerUi.Dockerfile
+    restart: always
+    ports:
+        - "80:80"
+    mem_limit: 700m

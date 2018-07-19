@@ -1,0 +1,19 @@
+version: '2'
+services:
+  express_api_swaggerui:
+    build:
+        context: ./
+        dockerfile: dockerfiles/Express-Api-SwaggerUi_separated.Dockerfile
+    restart: always
+    mem_limit: 700m
+  proxy_express_nginx:
+    build:
+        context: ./
+        dockerfile: dockerfiles/nginx_separated.Dockerfile
+    depends_on: 
+      -  express_api_swaggerui
+    links: 
+      -  express_api_swaggerui
+    restart: always
+    ports:
+        - "80:80"
