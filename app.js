@@ -156,7 +156,7 @@ let authorizedSpec;
     }));
 })();
 
-app.get('/swagger.json', function (req, res) {
+app.get('/swagger/swagger.json', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     if (req.headers.api_key && req.headers.api_key === "123456") {
         res.send(authorizedSpec);
