@@ -17,6 +17,8 @@ const processUuid = uuid.v4();
  * @swagger
  * /api/status:
  *   get:
+ *     security:
+ *      - api_key: []
  *     tags:
  *      - Status
  *     description: System Status

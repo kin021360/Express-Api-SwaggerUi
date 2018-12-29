@@ -31,8 +31,8 @@ Sample api key authorization of api_key: 123456
 ## What's used
 
 - [Express](https://github.com/expressjs/express) - Express sever version 4
-- [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) - Write your api code and swagger doc at the same time in js files.
-- [Swagger UI](https://github.com/swagger-api/swagger-ui) - Swagger UI version 2.1.5
+- [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) - Write your api code and swagger doc at the same time in .js files.
+- [Swagger UI](https://github.com/swagger-api/swagger-ui) - Swagger UI version 2.1.5 (customized)
 
 ## Example using swagger-jsdoc
 
@@ -92,7 +92,7 @@ docker-compose up -d
 
 Stop the container:
 ```bash
-docker-compose down
+docker-compose stop
 ```
 
 ## Docker Compose (Separated nodejs and nginx containers)
@@ -111,5 +111,5 @@ docker-compose -f docker-compose_separated.yml up -d
 
 Stop the container:
 ```bash
-docker-compose -f docker-compose_separated.yml down
+docker-compose -f docker-compose_separated.yml stop
 ```
