@@ -30,7 +30,7 @@ Sample api key authorization of api_key: 123456
 
 ## What's used
 
-- [Express](https://github.com/expressjs/express) - Express sever version 4
+- [Express](https://github.com/expressjs/express) - Express server version 4
 - [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) - Write your api code and swagger doc at the same time in .js files.
 - [Swagger UI](https://github.com/swagger-api/swagger-ui) - Swagger UI version 2.1.5 (customized)
 
@@ -63,6 +63,10 @@ router.get("/status", checkApiKey, function (req, res) {
     // code implementation
 });
 ```
+
+## Alternative
+
+You can also consider to use [swagger-ui-express](https://github.com/scottie1984/swagger-ui-express). It is also doing same thing with newer swagger ui and compatible with swagger-jsdoc.
 
 ## Node.js Load Balancing
 

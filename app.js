@@ -184,6 +184,7 @@ if (app.get('env') === 'dev') {
     // will print stacktrace
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
+		unhandledExLogger.error(err);
         res.render('error', {
             message: err.message,
             error: err
@@ -194,6 +195,7 @@ if (app.get('env') === 'dev') {
     // no stacktraces leaked to user
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
+		unhandledExLogger.error(err);
         res.render('error', {
             message: err.message,
             error: {}
