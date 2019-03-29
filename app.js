@@ -4,7 +4,6 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const accessLogger = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const log4js = require("log4js");
 const cors = require('cors');
@@ -56,8 +55,8 @@ app.use(helmet());
 app.use(accessLogger('dev'));
 
 // Use bodyParser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 // Use cookieParser
 app.use(cookieParser());
