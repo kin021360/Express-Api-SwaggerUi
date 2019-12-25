@@ -1,0 +1,31 @@
+{
+  "@aws-cdk/core:enableStackNameDuplicates": "true",
+  "aws-cdk:enableDiffNoFail": "true",
+  "vpc-provider:account=551676285156:filter.vpc-id=vpc-33113654:region=ap-northeast-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-33113654",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-75ae4e3d",
+            "availabilityZone": "ap-northeast-1a",
+            "routeTableId": "rtb-bd9428db"
+          },
+          {
+            "subnetId": "subnet-79e1b222",
+            "availabilityZone": "ap-northeast-1c",
+            "routeTableId": "rtb-bd9428db"
+          },
+          {
+            "subnetId": "subnet-0056be2b",
+            "availabilityZone": "ap-northeast-1d",
+            "routeTableId": "rtb-bd9428db"
+          }
+        ]
+      }
+    ]
+  }
+}
