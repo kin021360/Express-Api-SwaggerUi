@@ -1,11 +1,10 @@
-extends layout
+<%- include('./header.ejs') %>
 
+<h1>Process uuid: <%= processUuid %></h1>
+<h3>Process Uptime: <%= processUpTime %> hour(s)</h3>
+<h3>System Load Avg: <%= loadAvg %></h3>
+<h3>System Uptime: <%= upTime %> hour(s)</h3>
+<br>
+<h3>Back-End Version: <%= version %></h3>
 
-block content
-   h1="Process uuid: "+processUuid
-   h3="Process Uptime: "+processUpTime+" hour(s)"
-   h3="System Load Avg: "+loadAvg
-   h3="System Uptime: "+upTime+" hour(s)"
-   h3="Network Access: "+networkAccess
-   br
-   h2="Back-End Version: "+ version
+<%- include('./footer.ejs') %>
