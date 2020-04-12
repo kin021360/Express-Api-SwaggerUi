@@ -15,11 +15,11 @@
     "cookie-parser": "~1.4.x",
     "cors": "^2.8.4",
     "debug": "^4.1.x",
+    "ejs": "^3.x.x",
     "express": "^4.16.x",
     "helmet": "^3.x.x",
     "log4js": "~3.0.6",
     "morgan": "~1.9.x",
-    "pug": "~2.0.0-rc.4",
     "serve-favicon": "~2.4.5",
     "swagger-jsdoc": "^3.2.9",
     "uuid": "^3.3.2"
